@@ -7,5 +7,7 @@ class FirstTestLambda extends RequestStreamHandler {
   override def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit = {
     val inputData = scala.io.Source.fromInputStream(input).mkString
     println(inputData)
+    val decoded_event = decode[PingEvent](inputData)
+    println(decoded_event)
   }
 }

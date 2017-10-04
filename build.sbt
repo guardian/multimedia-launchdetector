@@ -13,6 +13,9 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-events" % "1.3.0"
 )
 
+// https://mvnrepository.com/artifact/com.gu/content-api-models
+libraryDependencies += "com.gu" % "content-api-models" % "11.26"
+
 libraryDependencies ++= Seq(
   "io.circe" %% "circe-core",
   "io.circe" %% "circe-generic",
