@@ -1,3 +1,5 @@
+import java.io.{InputStream, OutputStream}
+
 import org.apache.commons.codec.digest.DigestUtils
 import com.amazonaws.services.kinesis.clientlibrary.types.UserRecord
 import com.amazonaws.services.kinesis.model.Record
@@ -5,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.KinesisEvent
 import com.amazonaws.services.lambda.runtime
 import com.gu.contentatom.thrift.Atom
 import com.gu.crier.model.event.v1._
+import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 
 import scala.collection.JavaConverters._
 
@@ -19,7 +22,7 @@ class LaunchDetectorLambda {
         case ItemType.Atom=>
           event.payload.exists({
             case EventPayload.Atom(atom)=>
-              AtomEventProcessor.process(atom)
+              AtomEventProcessor.process(atom, event.eventType)
             case _=>
               false
           })

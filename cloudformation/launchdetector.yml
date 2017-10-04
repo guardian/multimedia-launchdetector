@@ -7,7 +7,7 @@ Parameters:
   App:
     Type: String
     Description: Application identifier for RiffRaff
-    Default: video-ipub-lambda
+    Default: launchdetector
   Stack:
     Type: String
     Description: Stack identifier for RiffRaff
@@ -29,7 +29,7 @@ Resources:
   LambdaSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription:  Interactivepublisher lambda function security group
+      GroupDescription:  Launch Detector lambda function security group
       VpcId: !Ref VPCID
   LambdaRole:
     Type: AWS::IAM::Role
@@ -63,6 +63,17 @@ Resources:
                 - ec2:DescribeNetworkInterfaces
                 - ec2:DeleteNetworkInterface
                 Resource: "*"
+        - PolicyName: LambdaDLQAccess
+          PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                Effect: Allow
+                Action:
+                - sqs:SendMessage
+                - sqs:SendMessageBatch
+                Resource: !GetAtt DeadLetterQueue.Arn
+  DeadLetterQueue:
+    Type: AWS::SQS::Queue
   LaunchDetectorLambda:
     Type: AWS::Lambda::Function
     Properties:
@@ -75,6 +86,9 @@ Resources:
       Handler: LaunchDetectorLambda
       Role: !Sub ${LambdaRole.Arn}
       Runtime: java8
+      Timeout: 60
+      DeadLetterConfig:
+        TargetArn: !GetAtt DeadLetterQueue.Arn
       Environment:
         Variables:
           CRIER_STREAM: !Ref CapiStreamArn
@@ -89,4 +103,3 @@ Resources:
       Principal: kinesis.amazonaws.com
       SourceArn: !Ref CapiStreamArn
       FunctionName: !Sub ${LaunchDetectorLambda.Arn}
-Outputs:

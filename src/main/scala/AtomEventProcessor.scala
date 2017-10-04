@@ -1,5 +1,6 @@
 import com.gu.contentatom.thrift.{Atom, AtomType}
-import com.gu.story.model.v1.EventType
+import com.gu.crier.model.event.v1.EventType
+
 
 object AtomEventProcessor {
   def process(atom: Atom, eventType: EventType):Boolean = {
