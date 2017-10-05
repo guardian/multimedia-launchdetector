@@ -4,6 +4,9 @@ Parameters:
   CapiStreamArn:
     Type: String
     Description: Arn of the Crier kinesis stream to attach to
+  CapiAccountId:
+    Type: String
+    Description: Numeric account ID of the account to be allowed to trigger the launch detector
   App:
     Type: String
     Description: Application identifier for RiffRaff
@@ -72,8 +75,69 @@ Resources:
                 - sqs:SendMessage
                 - sqs:SendMessageBatch
                 Resource: !GetAtt DeadLetterQueue.Arn
+        - PolicyName: LambdaTriggerAccess
+          PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                  - kinesis:GetRecords
+                  - kinesis:GetShardIterator
+                  - kinesis:DescribeStream
+                  - kinesis:ListStreams
+                  Resource: !GetAtt ForwardedKinesisStream.Arn
+                - Effect: Allow
+                  Action:
+                  - sns:Publish
+                  - sns:Subscribe
+                  - sns:Unsubscribe
+                  - sns:ListTopics
+                  - sns:GetTopicAttributes
+                  Resource: !Ref ForwardedSNSTopic
+  CrossAccountRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS: !Ref CapiAccountId
+          Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: LambdaTriggerAccess
+          PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                  - kinesis:Put*
+                  - kinesis:DescribeStream
+                  - kinesis:ListStreams
+                  Resource: !GetAtt ForwardedKinesisStream.Arn
+                - Effect: Allow
+                  Action:
+                  - sns:Publish
+                  - sns:ListTopics
+                  - sns:GetTopicAttributes
+                  Resource: !Ref ForwardedSNSTopic
   DeadLetterQueue:
     Type: AWS::SQS::Queue
+  ForwardedSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Sub Forwarded SNS topic for launchdetector-${Stage}
+      #FIXME: this is causing a circular dependency issue
+#      Subscription:
+#        - Endpoint: !GetAtt LaunchDetectorLambda.Arn
+#          Protocol: lambda
+  ForwardedKinesisStream:
+    Type: AWS::Kinesis::Stream
+    Properties:
+      #FIXME: if brought into production these should be parameters
+      RetentionPeriodHours: 24
+      ShardCount: 1
   LaunchDetectorLambda:
     Type: AWS::Lambda::Function
     Properties:
@@ -100,6 +164,16 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      Principal: kinesis.amazonaws.com
-      SourceArn: !Ref CapiStreamArn
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref ForwardedSNSTopic
       FunctionName: !Sub ${LaunchDetectorLambda.Arn}
+Outputs:
+  CrossAccountRole:
+    Value: !GetAtt CrossAccountRole.Arn
+    Description: Role to allow access to the trigger from another AWS account
+  ForwardedSNSTopic:
+    Value: !Ref ForwardedSNSTopic
+    Description: SNS topic that triggers the lambda. This should be linked to the atom-event-forwarder lambda.
+  ForwardedKinesisStream:
+    Value: !Ref ForwardedKinesisStream
+    Description: Kinesis stream that can trigger the lambda. This should be linked to the atom-event-forwarder lambda.
