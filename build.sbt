@@ -15,10 +15,10 @@ libraryDependencies ++= Seq(
 )
 
 // https://mvnrepository.com/artifact/com.gu/content-api-models-scala
-libraryDependencies += "com.gu" %% "content-api-models-scala" % "11.31" % "provided"
+libraryDependencies += "com.gu" %% "content-api-models-scala" % "11.31"
 
 // https://mvnrepository.com/artifact/com.gu/content-api-models-json
-libraryDependencies += "com.gu" %% "content-api-models-json" % "11.31" % "provided"
+libraryDependencies += "com.gu" %% "content-api-models-json" % "11.31"
 
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
@@ -30,7 +30,12 @@ lazy val app = (project in file(".")).settings(
 
 )
 
-
+assemblyMergeStrategy in assembly := {
+  case "shared.thrift" => MergeStrategy.discard
+  case x =>
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
+}
 riffRaffPackageType := assembly.value
 //riffRaffPackageType := (packageZipTarball in Universal).value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
