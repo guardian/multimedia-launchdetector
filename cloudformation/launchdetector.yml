@@ -87,8 +87,8 @@ Resources:
       Role: !Sub ${LambdaRole.Arn}
       Runtime: java8
       Timeout: 60
-      DeadLetterConfig:
-        TargetArn: !GetAtt DeadLetterQueue.Arn
+#      DeadLetterConfig:
+#        TargetArn: !GetAtt DeadLetterQueue.Arn
       Environment:
         Variables:
           CRIER_STREAM: !Ref CapiStreamArn

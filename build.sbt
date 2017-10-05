@@ -1,8 +1,8 @@
-name := "multimedia-launchdetector"
+enablePlugins(RiffRaffArtifact, AssemblyPlugin)
+
+name := "launchdetector"
 
 version := "0.1"
-
-val circeVersion = "0.8.0"
 
 scalaVersion := "2.12.3"
 
@@ -26,5 +26,17 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
 lazy val app = (project in file(".")).settings(
   organization := "com.theguardian",
-  assemblyJarName in assembly := "launchdetector_lambda.jar"
+  assemblyJarName in assembly := "launchdetector_lambda.jar",
+
 )
+
+
+riffRaffPackageType := assembly.value
+//riffRaffPackageType := (packageZipTarball in Universal).value
+riffRaffUploadArtifactBucket := Option("riffraff-artifact")
+riffRaffUploadManifestBucket := Option("riffraff-builds")
+
+riffRaffManifestProjectName := "multimedia:launchdetector"
+//riffRaffArtifactResources := Seq(
+//  (baseDirectory in Global in app).value / "riff-raff.yaml" -> "riff-raff.yaml",
+//)

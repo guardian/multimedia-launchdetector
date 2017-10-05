@@ -7,12 +7,12 @@ import com.amazonaws.services.lambda.runtime.events.KinesisEvent
 import com.amazonaws.services.lambda.runtime
 import com.gu.contentatom.thrift.Atom
 import com.gu.crier.model.event.v1._
-import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
+import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 
 import scala.collection.JavaConverters._
 
-class LaunchDetectorLambda {
-  def handle(event:KinesisEvent): Unit = {
+class LaunchDetectorLambda extends RequestHandler[KinesisEvent, Unit] {
+  override def handleRequest(event:KinesisEvent, context: Context): Unit = {
     val rawRecords: List[Record] = event.getRecords.asScala.map(_.getKinesis).toList
     val userRecords = UserRecord.deaggregate(rawRecords.asJava)
 

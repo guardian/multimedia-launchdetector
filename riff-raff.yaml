@@ -1,0 +1,12 @@
+stacks: [multimedia]
+regions: [eu-west-1]
+
+deployments:
+  launchdetector:
+    type: aws-lambda
+    app: launchdetector
+    parameters:
+      bucket: gnm-multimedia-rr-deployables
+      fileName: launchdetector_lambda.jar
+      functionNames: [launchdetector-]
+      prefixStack: false
