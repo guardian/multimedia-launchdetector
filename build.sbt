@@ -23,6 +23,11 @@ libraryDependencies += "com.gu" %% "content-api-models-json" % "11.31"
 // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.12
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 
+libraryDependencies += "org.apache.logging.log4j" % "log4j-api" % "2.9.1"
+
+libraryDependencies += "org.apache.logging.log4j" % "log4j-core" % "2.9.1"
+
+libraryDependencies += "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0"
 
 lazy val app = (project in file(".")).settings(
   organization := "com.theguardian",
