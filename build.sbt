@@ -37,11 +37,11 @@ assemblyMergeStrategy in assembly := {
     oldStrategy(x)
 }
 riffRaffPackageType := assembly.value
-//riffRaffPackageType := (packageZipTarball in Universal).value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
+riffRaffManifestBranch := sys.env.getOrElse("CIRCLE_BRANCH","unknown")
+riffRaffManifestRevision := sys.env.getOrElse("CIRCLE_BUILD_NUM","SNAPSHOT")
+riffRaffManifestVcsUrl := sys.env.getOrElse("CIRCLE_BUILD_URL", "")
+riffRaffBuildIdentifier := sys.env.getOrElse("CIRCLE_BUILD_NUM", "SNAPSHOT")
 
 riffRaffManifestProjectName := "multimedia:launchdetector"
-//riffRaffArtifactResources := Seq(
-//  (baseDirectory in Global in app).value / "riff-raff.yaml" -> "riff-raff.yaml",
-//)
