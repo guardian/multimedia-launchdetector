@@ -79,23 +79,28 @@ Resources:
           PolicyDocument:
               Version: 2012-10-17
               Statement:
+#                - Effect: Allow
+#                  Action:
+#                  - kinesis:GetRecords
+#                  - kinesis:GetShardIterator
+#                  - kinesis:DescribeStream
+#                  - kinesis:ListStreams
+#                  Resource: !GetAtt ForwardedKinesisStream.Arn
+#                - Effect: Allow
+#                  Action:
+#                  - sns:Publish
+#                  - sns:Subscribe
+#                  - sns:Unsubscribe
+#                  - sns:GetTopicAttributes
+#                  Resource: !Ref ForwardedSNSTopic
                 - Effect: Allow
                   Action:
-                  - kinesis:GetRecords
-                  - kinesis:GetShardIterator
-                  - kinesis:DescribeStream
-                  - kinesis:ListStreams
-                  Resource: !GetAtt ForwardedKinesisStream.Arn
-                - Effect: Allow
-                  Action:
-                  - sns:Publish
-                  - sns:Subscribe
-                  - sns:Unsubscribe
                   - sns:ListTopics
-                  - sns:GetTopicAttributes
-                  Resource: !Ref ForwardedSNSTopic
+                  Resource: "*"
+
   CrossAccountRole:
     Type: AWS::IAM::Role
+    DependsOn: LaunchDetectorLambda
     Properties:
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
@@ -110,12 +115,12 @@ Resources:
           PolicyDocument:
               Version: 2012-10-17
               Statement:
-                - Effect: Allow
-                  Action:
-                  - kinesis:Put*
-                  - kinesis:DescribeStream
-                  - kinesis:ListStreams
-                  Resource: !GetAtt ForwardedKinesisStream.Arn
+#                - Effect: Allow
+#                  Action:
+#                  - kinesis:Put*
+#                  - kinesis:DescribeStream
+#                  - kinesis:ListStreams
+#                  Resource: !GetAtt ForwardedKinesisStream.Arn
                 - Effect: Allow
                   Action:
                   - sns:Publish
@@ -126,18 +131,19 @@ Resources:
     Type: AWS::SQS::Queue
   ForwardedSNSTopic:
     Type: AWS::SNS::Topic
+    DependsOn: LaunchDetectorLambda
     Properties:
       DisplayName: !Sub Forwarded SNS topic for launchdetector-${Stage}
       #FIXME: this is causing a circular dependency issue
-#      Subscription:
-#        - Endpoint: !GetAtt LaunchDetectorLambda.Arn
-#          Protocol: lambda
-  ForwardedKinesisStream:
-    Type: AWS::Kinesis::Stream
-    Properties:
-      #FIXME: if brought into production these should be parameters
-      RetentionPeriodHours: 24
-      ShardCount: 1
+      Subscription:
+        - Endpoint: !GetAtt LaunchDetectorLambda.Arn
+          Protocol: lambda
+#  ForwardedKinesisStream:
+#    Type: AWS::Kinesis::Stream
+#    Properties:
+#      #FIXME: if brought into production these should be parameters
+#      RetentionPeriodHours: 24
+#      ShardCount: 1
   LaunchDetectorLambda:
     Type: AWS::Lambda::Function
     Properties:
@@ -174,6 +180,6 @@ Outputs:
   ForwardedSNSTopic:
     Value: !Ref ForwardedSNSTopic
     Description: SNS topic that triggers the lambda. This should be linked to the atom-event-forwarder lambda.
-  ForwardedKinesisStream:
-    Value: !Ref ForwardedKinesisStream
-    Description: Kinesis stream that can trigger the lambda. This should be linked to the atom-event-forwarder lambda.
+#  ForwardedKinesisStream:
+#    Value: !Ref ForwardedKinesisStream
+#    Description: Kinesis stream that can trigger the lambda. This should be linked to the atom-event-forwarder lambda.
