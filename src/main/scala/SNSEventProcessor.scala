@@ -5,6 +5,7 @@ import scala.util.{Failure, Success, Try}
 import scala.concurrent.ExecutionContext.Implicits.global
 import io.circe.parser._
 import com.gu.crier.model.event.v1._
+//intellij thinks that this is unused. But, if it is not imported, then Scala can't find a decoder for Option[EventPayload]
 import cats.syntax.either._
 import com.gu.contentapi.client.model.v1._
 import com.gu.contentapi.json.CirceDecoders._

@@ -55,10 +55,12 @@ lazy val app = (project in file(".")).settings(
 
 assemblyMergeStrategy in assembly := {
   case "shared.thrift" => MergeStrategy.discard
+  case "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat" => MergeStrategy.concat
   case x =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
 }
+
 riffRaffPackageType := assembly.value
 riffRaffUploadArtifactBucket := Option("riffraff-artifact")
 riffRaffUploadManifestBucket := Option("riffraff-builds")
