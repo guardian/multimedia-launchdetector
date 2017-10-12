@@ -1,9 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: "Lambda function to update Pluto with published information from CAPI"
 Parameters:
-  CapiStreamArn:
-    Type: String
-    Description: Arn of the Crier kinesis stream to attach to
   CapiAccountId:
     Type: String
     Description: Numeric account ID of the account to be allowed to trigger the launch detector
@@ -79,25 +76,10 @@ Resources:
           PolicyDocument:
               Version: 2012-10-17
               Statement:
-#                - Effect: Allow
-#                  Action:
-#                  - kinesis:GetRecords
-#                  - kinesis:GetShardIterator
-#                  - kinesis:DescribeStream
-#                  - kinesis:ListStreams
-#                  Resource: !GetAtt ForwardedKinesisStream.Arn
-#                - Effect: Allow
-#                  Action:
-#                  - sns:Publish
-#                  - sns:Subscribe
-#                  - sns:Unsubscribe
-#                  - sns:GetTopicAttributes
-#                  Resource: !Ref ForwardedSNSTopic
                 - Effect: Allow
                   Action:
                   - sns:ListTopics
                   Resource: "*"
-
   CrossAccountRole:
     Type: AWS::IAM::Role
     DependsOn: LaunchDetectorLambda
@@ -145,8 +127,8 @@ Resources:
       Runtime: java8
       Timeout: 30
       MemorySize: 320
-#      DeadLetterConfig:
-#        TargetArn: !GetAtt DeadLetterQueue.Arn
+      DeadLetterConfig:
+        TargetArn: !GetAtt DeadLetterQueue.Arn
       Environment:
         Variables:
           CRIER_STREAM: !Ref CapiStreamArn

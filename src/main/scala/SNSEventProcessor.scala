@@ -15,15 +15,6 @@ import io.circe.Decoder._
 import io.circe._
 
 object SNSEventProcessor {
-//    implicit val decodeOptionalPayload:Decoder[Option[EventPayload]] = new Decoder[Option[EventPayload]] {
-//      override final def apply(c: HCursor): Result[Option[EventPayload]] = {
-//        c.value match {
-//          case Json.Null=>Right(None)
-//          case _=> c.value.as[EventPayload].map(Some(_))//.fold({error=>Left(error)}, {payload=>Right(Some(payload))})
-//        }
-//      }
-//    }
-
   def process(records:Seq[SNSRecord])(func: Event=>Future[Try[Boolean]]):Future[Seq[Try[Boolean]]] = {
     val processFutureList:Seq[Future[Try[Boolean]]] = records.map { record=>
       eventFromRecord(record) match {
