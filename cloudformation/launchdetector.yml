@@ -115,12 +115,6 @@ Resources:
           PolicyDocument:
               Version: 2012-10-17
               Statement:
-#                - Effect: Allow
-#                  Action:
-#                  - kinesis:Put*
-#                  - kinesis:DescribeStream
-#                  - kinesis:ListStreams
-#                  Resource: !GetAtt ForwardedKinesisStream.Arn
                 - Effect: Allow
                   Action:
                   - sns:Publish
@@ -134,16 +128,9 @@ Resources:
     DependsOn: LaunchDetectorLambda
     Properties:
       DisplayName: !Sub Forwarded SNS topic for launchdetector-${Stage}
-      #FIXME: this is causing a circular dependency issue
       Subscription:
         - Endpoint: !GetAtt LaunchDetectorLambda.Arn
           Protocol: lambda
-#  ForwardedKinesisStream:
-#    Type: AWS::Kinesis::Stream
-#    Properties:
-#      #FIXME: if brought into production these should be parameters
-#      RetentionPeriodHours: 24
-#      ShardCount: 1
   LaunchDetectorLambda:
     Type: AWS::Lambda::Function
     Properties:
@@ -156,7 +143,8 @@ Resources:
       Handler: LaunchDetectorLambda
       Role: !Sub ${LambdaRole.Arn}
       Runtime: java8
-      Timeout: 60
+      Timeout: 30
+      MemorySize: 256
 #      DeadLetterConfig:
 #        TargetArn: !GetAtt DeadLetterQueue.Arn
       Environment:
@@ -180,6 +168,3 @@ Outputs:
   ForwardedSNSTopic:
     Value: !Ref ForwardedSNSTopic
     Description: SNS topic that triggers the lambda. This should be linked to the atom-event-forwarder lambda.
-#  ForwardedKinesisStream:
-#    Value: !Ref ForwardedKinesisStream
-#    Description: Kinesis stream that can trigger the lambda. This should be linked to the atom-event-forwarder lambda.

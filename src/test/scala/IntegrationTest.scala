@@ -36,7 +36,7 @@ class FakeClientContext extends ClientContext {
 class FakeContext extends Context {
   override def getFunctionName: String = "testFunction"
 
-  override def getRemainingTimeInMillis: Int = 1000
+  override def getRemainingTimeInMillis: Int = 10000
 
   override def getLogger: LambdaLogger = new FakeLogger
 
