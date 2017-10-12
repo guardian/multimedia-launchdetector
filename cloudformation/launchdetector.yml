@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: "Lambda function to update Pluto with published information from CAPI"
 Parameters:
-  CapiStreamArn:
+  CapiAccountId:
     Type: String
-    Description: Arn of the Crier kinesis stream to attach to
+    Description: Numeric account ID of the account to be allowed to trigger the launch detector
   App:
     Type: String
     Description: Application identifier for RiffRaff
@@ -72,8 +72,47 @@ Resources:
                 - sqs:SendMessage
                 - sqs:SendMessageBatch
                 Resource: !GetAtt DeadLetterQueue.Arn
+        - PolicyName: LambdaTriggerAccess
+          PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                  - sns:ListTopics
+                  Resource: "*"
+  CrossAccountRole:
+    Type: AWS::IAM::Role
+    DependsOn: LaunchDetectorLambda
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            AWS: !Ref CapiAccountId
+          Action: sts:AssumeRole
+      Path: "/"
+      Policies:
+        - PolicyName: LambdaTriggerAccess
+          PolicyDocument:
+              Version: 2012-10-17
+              Statement:
+                - Effect: Allow
+                  Action:
+                  - sns:Publish
+                  - sns:ListTopics
+                  - sns:GetTopicAttributes
+                  Resource: !Ref ForwardedSNSTopic
   DeadLetterQueue:
     Type: AWS::SQS::Queue
+  ForwardedSNSTopic:
+    Type: AWS::SNS::Topic
+    DependsOn: LaunchDetectorLambda
+    Properties:
+      DisplayName: !Sub Forwarded SNS topic for launchdetector-${Stage}
+      Subscription:
+        - Endpoint: !GetAtt LaunchDetectorLambda.Arn
+          Protocol: lambda
   LaunchDetectorLambda:
     Type: AWS::Lambda::Function
     Properties:
@@ -86,9 +125,10 @@ Resources:
       Handler: LaunchDetectorLambda
       Role: !Sub ${LambdaRole.Arn}
       Runtime: java8
-      Timeout: 60
-#      DeadLetterConfig:
-#        TargetArn: !GetAtt DeadLetterQueue.Arn
+      Timeout: 30
+      MemorySize: 320
+      DeadLetterConfig:
+        TargetArn: !GetAtt DeadLetterQueue.Arn
       Environment:
         Variables:
           CRIER_STREAM: !Ref CapiStreamArn
@@ -100,6 +140,13 @@ Resources:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      Principal: kinesis.amazonaws.com
-      SourceArn: !Ref CapiStreamArn
+      Principal: sns.amazonaws.com
+      SourceArn: !Ref ForwardedSNSTopic
       FunctionName: !Sub ${LaunchDetectorLambda.Arn}
+Outputs:
+  CrossAccountRole:
+    Value: !GetAtt CrossAccountRole.Arn
+    Description: Role to allow access to the trigger from another AWS account
+  ForwardedSNSTopic:
+    Value: !Ref ForwardedSNSTopic
+    Description: SNS topic that triggers the lambda. This should be linked to the atom-event-forwarder lambda.

@@ -1,0 +1,196 @@
+{
+  "payloadId": "fc89ae38-dfbf-4e40-ab90-cfb8c4b7b4ce",
+  "eventType": "update",
+  "itemType": "atom",
+  "dateTime": 1507647571173,
+  "payload": {
+    "atom": {
+      "id": "fc89ae38-dfbf-4e40-ab90-cfb8c4b7b4ce",
+      "atomType": "media",
+      "labels": [],
+      "defaultHtml": "\n\n\n    <iframe frameborder=\"0\" allowfullscreen=\"true\" src=\"https://www.youtube.com/embed/qPsTgoe_Fuk?showinfo=0&rel=0\"></iframe>\n  \n",
+      "data": {
+        "media": {
+          "assets": [
+            {
+              "assetType": "video",
+              "version": 1,
+              "id": "qPsTgoe_Fuk",
+              "platform": "youtube"
+            }
+          ],
+          "activeVersion": 1,
+          "title": "Nicola Sturgeon holds up strepsils at SNP conference – video ",
+          "category": "news",
+          "duration": 27,
+          "source": "SNP",
+          "posterUrl": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/8_0_1904_1071/master/1904.png",
+          "metadata": {
+            "tags": [
+              "Nicola Sturgeon",
+              "SNP",
+              "Scottish National Party",
+              "UK News",
+              "Glasgow",
+              "Politics",
+              "Throat Sweets",
+              "Cough",
+              "Theresa May"
+            ],
+            "categoryId": "25",
+            "channelId": "UCIRYBXDze5krPDzAEOxFGVA",
+            "pluto": {
+              "projectId": "KP-26876"
+            }
+          },
+          "posterImage": {
+            "assets": [
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/8_0_1904_1071/1000.png",
+                "dimensions": {
+                  "height": 563,
+                  "width": 1000
+                },
+                "size": 134648,
+                "aspectRatio": "16:9"
+              },
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/8_0_1904_1071/500.png",
+                "dimensions": {
+                  "height": 281,
+                  "width": 500
+                },
+                "size": 40081,
+                "aspectRatio": "16:9"
+              },
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/8_0_1904_1071/140.png",
+                "dimensions": {
+                  "height": 79,
+                  "width": 140
+                },
+                "size": 6200,
+                "aspectRatio": "16:9"
+              },
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/8_0_1904_1071/1904.png",
+                "dimensions": {
+                  "height": 1071,
+                  "width": 1904
+                },
+                "size": 435275,
+                "aspectRatio": "16:9"
+              }
+            ],
+            "master": {
+              "mimeType": "image/png",
+              "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/8_0_1904_1071/master/1904.png",
+              "dimensions": {
+                "height": 1071,
+                "width": 1904
+              },
+              "size": 2453668,
+              "aspectRatio": "16:9"
+            },
+            "mediaId": "https://api.media.gutools.co.uk/images/2d761b881be40211ddf2a8992812706d6c9d3fd5",
+            "source": "SNP"
+          },
+          "byline": [],
+          "commissioningDesks": [],
+          "keywords": [
+            "uk/uk"
+          ],
+          "trailImage": {
+            "assets": [
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/67_0_1785_1071/1000.png",
+                "dimensions": {
+                  "height": 600,
+                  "width": 1000
+                },
+                "size": 144978,
+                "aspectRatio": "5:3"
+              },
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/67_0_1785_1071/500.png",
+                "dimensions": {
+                  "height": 300,
+                  "width": 500
+                },
+                "size": 44036,
+                "aspectRatio": "5:3"
+              },
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/67_0_1785_1071/140.png",
+                "dimensions": {
+                  "height": 84,
+                  "width": 140
+                },
+                "size": 6590,
+                "aspectRatio": "5:3"
+              },
+              {
+                "mimeType": "image/png",
+                "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/67_0_1785_1071/1785.png",
+                "dimensions": {
+                  "height": 1071,
+                  "width": 1785
+                },
+                "size": 419996,
+                "aspectRatio": "5:3"
+              }
+            ],
+            "master": {
+              "mimeType": "image/png",
+              "file": "https://media.guim.co.uk/2d761b881be40211ddf2a8992812706d6c9d3fd5/67_0_1785_1071/master/1785.png",
+              "dimensions": {
+                "height": 1071,
+                "width": 1785
+              },
+              "size": 2389142,
+              "aspectRatio": "5:3"
+            },
+            "mediaId": "https://api.media.gutools.co.uk/images/2d761b881be40211ddf2a8992812706d6c9d3fd5",
+            "source": "SNP"
+          }
+        }
+      },
+      "contentChangeDetails": {
+        "lastModified": {
+          "date": 1507647561000,
+          "user": {
+            "email": "james.bullock.casual@guardian.co.uk",
+            "firstName": "James",
+            "lastName": "Bullock"
+          }
+        },
+        "created": {
+          "date": 1507646763000,
+          "user": {
+            "email": "james.bullock.casual@guardian.co.uk",
+            "firstName": "James",
+            "lastName": "Bullock"
+          }
+        },
+        "published": {
+          "date": 1507647561000,
+          "user": {
+            "email": "james.bullock.casual@guardian.co.uk",
+            "firstName": "James",
+            "lastName": "Bullock"
+          }
+        },
+        "revision": 13
+      },
+      "title": "Nicola Sturgeon holds up strepsils at SNP conference – video ",
+      "commissioningDesks": []
+    }
+  }
+}
