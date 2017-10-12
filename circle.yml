@@ -26,5 +26,4 @@ deployment:
   riffraff_deploy:
     branch: /.*/
     commands:
-      - sbt assembly
       - sbt riffRaffUpload

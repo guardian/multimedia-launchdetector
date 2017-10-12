@@ -144,7 +144,7 @@ Resources:
       Role: !Sub ${LambdaRole.Arn}
       Runtime: java8
       Timeout: 30
-      MemorySize: 256
+      MemorySize: 320
 #      DeadLetterConfig:
 #        TargetArn: !GetAtt DeadLetterQueue.Arn
       Environment:
