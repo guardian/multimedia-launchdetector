@@ -1,23 +1,18 @@
-import java.io.{InputStream, OutputStream}
-
-import org.apache.commons.codec.digest.DigestUtils
-import com.amazonaws.services.kinesis.clientlibrary.types.UserRecord
-import com.amazonaws.services.kinesis.model.Record
-import com.amazonaws.services.lambda.runtime.events.KinesisEvent
+import com.amazonaws.services.lambda.runtime.events.SNSEvent
 import com.amazonaws.services.lambda.runtime
+import com.amazonaws.services.lambda.runtime.events.SNSEvent.SNSRecord
 import com.gu.contentatom.thrift.Atom
 import com.gu.crier.model.event.v1._
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 
 import scala.collection.JavaConverters._
 
-class LaunchDetectorLambda extends RequestHandler[KinesisEvent, Unit] {
-  override def handleRequest(event:KinesisEvent, context: Context): Unit = {
-    val rawRecords: List[Record] = event.getRecords.asScala.map(_.getKinesis).toList
-    val userRecords = UserRecord.deaggregate(rawRecords.asJava)
+class LaunchDetectorLambda extends RequestHandler[SNSEvent, Unit] {
+  override def handleRequest(incomingEvent:SNSEvent, context: Context): Unit = {
+    val rawRecords: List[SNSRecord] = incomingEvent.getRecords.asScala.toList
 
-    println(s"Processing ${userRecords.size} records ...")
-    CrierEventProcessor.process(userRecords.asScala) { event=>
+    println(s"Processing ${rawRecords.size} records ...")
+    CrierEventProcessor.process(rawRecords) { event=>
       event.itemType match {
         case ItemType.Atom=>
           event.payload.exists({
