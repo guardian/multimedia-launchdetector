@@ -9,6 +9,10 @@ import scala.collection.JavaConverters._
 
 class LaunchDetectorLambda extends RequestHandler[SNSEvent, Unit] {
   override def handleRequest(incomingEvent:SNSEvent, context: Context): Unit = {
+    println(s"Got incoming event: ${incomingEvent.toString}")
+    println(s"Event has records: ${incomingEvent.getRecords.toString}")
+    println(s"Converted to scala: ${incomingEvent.getRecords.asScala.toList.toString}")
+
     val rawRecords: List[SNSRecord] = incomingEvent.getRecords.asScala.toList
 
     println(s"Processing ${rawRecords.size} records ...")
