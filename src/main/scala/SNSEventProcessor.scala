@@ -28,7 +28,7 @@ object SNSEventProcessor {
     val processFutureList:Seq[Future[Try[Boolean]]] = records.map { record=>
       eventFromRecord(record) match {
         case Right(event)=>func(event)
-        case Left(error:DecodingFailure)=>Future(Failure(error))
+        case Left(error)=>Future(Failure(error))
       }
     }
     Future.sequence(processFutureList)

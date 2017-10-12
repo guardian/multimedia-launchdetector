@@ -36,10 +36,14 @@ class LaunchDetectorLambda extends RequestHandler[SNSEvent, Unit] with Logging {
       case Success(result)=> !result
       case _=>false
     })
+
     //Failure(err) means that there was a processing error
-    val errors = results.map({
-      case Failure(err)=>err
-    })
+    val errors = results
+      .filter(_.isFailure)
+      .map({
+        case Failure(err)=>err
+        case _=>new Exception //this should never be matched, as we filtered on isFailure, but is included to prevent a compiler warning
+      })
 
     println(s"Processed ${success.length} entries successfully and ignored ${ignored.length}")
     if(errors.nonEmpty){
