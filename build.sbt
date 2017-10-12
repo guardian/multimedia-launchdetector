@@ -39,7 +39,6 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-api" % "2.9.1",
   "org.apache.logging.log4j" % "log4j-core" % "2.9.1",
   "org.apache.logging.log4j" %% "log4j-api-scala" % "11.0",
-  "com.amazonaws" % "aws-lambda-java-log4j2" % "1.0.0",
   "com.fasterxml.jackson.dataformat" % "jackson-dataformat-yaml" % "2.7.3",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.5.4"
 )
@@ -55,7 +54,6 @@ lazy val app = (project in file(".")).settings(
 
 assemblyMergeStrategy in assembly := {
   case "shared.thrift" => MergeStrategy.discard
-  case "META-INF/org/apache/logging/log4j/core/config/plugins/Log4j2Plugins.dat" => MergeStrategy.rename
   case x =>
     val oldStrategy = (assemblyMergeStrategy in assembly).value
     oldStrategy(x)
